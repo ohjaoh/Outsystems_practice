@@ -11,7 +11,8 @@
 - [Day 2: Aggregate 필터링 및 변수 바인딩](#-day-2-aggregate-필터링-및-변수-바인딩)
 - [Day 3: Entity 1:1 관계 및 CRUD (상세 화면 / 저장 / 삭제)](#-day-3-entity-11-관계-및-crud-상세-화면--저장--삭제)
 - [Day 4: 대시보드 레이아웃 및 위젯/액션 실습](#-day-4-대시보드-레이아웃-및-위젯액션-실습)
-<!-- 추후 Day 5 등을 여기에 목록으로 추가할 수 있습니다 -->
+- [Day 5: 엔터티 관계(1:N, N:1) 및 마스터-디테일 CRUD 종합 실습](#-day-5-엔터티-관계1n-n1-마스터-디테일-crud-종합-실습)
+
 
 ---
 
@@ -129,6 +130,55 @@ Container를 활용한 화면 레이아웃 구성, 집계 데이터 표현(Count
 1. 화면에 각종 위젯 배치 및 Local Variable 선언
 2. 위젯 속성 설정 및 변수(`Variable`) 바인딩 수행
 3. Button Client Action 작성 후 버튼 클릭 시 Variable 값이 새로운 값(`NewValue`)으로 정상 변경되는지 확인
+
+</details>
+
+---
+
+## 📌 Day 5: 엔터티 관계(1:N, N:1) 및 마스터-디테일 CRUD 종합 실습
+
+Customer(9개 속성), Product, Order 간의 1:N(`Customer` → `Order`) 및 N:1(`Order` → `Product`) 관계를 설정하고, 마스터-디테일 구조의 통합 관리 및 연관 데이터 CUD 처리를 구현했습니다.
+
+### 🔗 실습 결과 링크
+- **Customer & Order Management App** 👉 [결과 화면 보기](https://personal-fdeqhkkx.outsystemscloud.com/CustomerOrder/CustomerList?_ts=639281965115790557)  
+  * 고객 목록 및 선택된 고객의 연관 주문 목록(카드 형태)을 연동하여 조회, 수정, 등록, 삭제 기능 구현
+
+### 🛠️ 핵심 구현 기능
+- **마스터-디테일 양방향 연동 (`CustomerList`)**
+  - Table 위젯(Name, Email, Grade)을 통한 고객 마스터 목록 제공 및 행 클릭 시 `SelectCustomerOnClick` 액션을 통해 `CurrentCustomerId` 갱신
+  - Order와 Product를 Join한 `GetOrdersByCustomerId` Aggregate를 활용하여 우측 패널에 선택된 고객의 주문 내역 동적 표시 (미선택 및 주문 없음 상태별 If 분기 처리)
+- **고객(Customer) 등록 및 수정 화면 분기 (`CustomerDetail`)**
+  - Input Parameter `CustomerId` (`Mandatory=No`) 및 `GetCustomerById` (Filter: `Customer.Id = CustomerId`, Max Records=1) 활용
+  - 8개 필드를 포함한 Form 구성 및 Name·Email 필수값 Validation 설정
+  - 신규 등록(`CustomerId = NullIdentifier()`)과 기존 정보 수정 처리 로직 구현
+- **주문(Order) 관리 및 디테일 처리 (`OrderDetail`)**
+  - 상품 드롭다운(`GetProducts.List` 소스) 및 수량·상태 입력을 위한 Form 구성
+  - Save 시 `Form.Valid` 검증 후 `Order.CustomerId` 할당 및 `CreateOrUpdateOrder` 실행
+  - 카드 단위 삭제 기능(`DeleteOrder` 서버 액션 연동 및 `GetOrdersByCustomerId` 새로고침) 구현
+
+<details>
+<summary><b>🔍 Day 5 상세 실습 시나리오 보기 (클릭)</b></summary>
+
+#### 🧩 Mission: Customer-Order 마스터 디테일 및 CRUD 종합 구현
+1. **데이터 모델링 확인**: Customer(9개 속성), Product, Order 엔터티 구조 및 1:N(`Customer`→`Order`), N:1(`Order`→`Product`) 관계 설정 확인
+2. **CustomerList 화면 구성**:
+   - `GetCustomers` Aggregate 및 Table 위젯(Name, Email, Grade 컬럼) 배치
+   - Input Parameter `SelectedCustomerId` 및 Local Variable `CurrentCustomerId` 추가
+3. **고객 상세/등록 화면 (`CustomerDetail`) 구현**:
+   - Input Parameter `CustomerId` (`Mandatory=No`) 추가 및 Name 컬럼 Link 연결 (`+ 신규 등록` 버튼 포함, `CustomerId = NullIdentifier()`)
+   - `GetCustomerById` Aggregate 생성 (Filter: `Customer.Id = CustomerId`, Max Records=1)
+   - 8필드 Form 배치 및 Name·Email 필수값 검증(Validation) 설정
+   - **Save 액션**: `If Form.Valid` ➔ `CreateOrUpdateCustomer` ➔ Message ➔ Navigate to `CustomerList` (SelectedCustomerId 반환 ID 전달)
+4. **목록 내 삭제 및 인터랙션 처리**:
+   - 목록의 Delete 컬럼을 통한 `DeleteCustomer` 서버 액션 실행 및 `GetCustomers` 갱신
+   - 행 클릭 시 `SelectCustomerOnClick`: `CurrentCustomerId` Assign ➔ `GetOrdersByCustomerId` 새로고침 (오른쪽 패널 표출)
+   - 우측 패널 If 분기 처리: 미선택 시(`CurrentCustomerId = NullIdentifier()`) 안내 문구 및 주문 없음(`List.Empty`) 안내 문구 표시
+5. **주문 카드 목록 및 상세(`OrderDetail`) 연동**:
+   - 우측 패널에 주문 카드 List(Product.Name, Quantity, Status, Price) 배치 및 카드별 Delete 기능 구현 (`DeleteOrder` 서버 액션 ➔ `GetOrdersByCustomerId` 갱신)
+   - `+ 주문 추가` 버튼을 통해 `OrderDetail` 화면 이동
+   - `OrderDetail` 화면 구성: Input 파라미터(`OrderId`, `CustomerId`), `GetOrderById`, `GetProducts` (드롭다운 소스) Aggregate 배치
+   - Form 구성: Product 드롭다운(`Source=GetProducts.List`), Quantity, Status 배치
+   - **Save 주문 액션**: `If Form.Valid` ➔ `Order.CustomerId` Assign ➔ `CreateOrUpdateOrder` ➔ Navigate to `CustomerList` (SelectedCustomerId 전달)
 
 </details>
 
