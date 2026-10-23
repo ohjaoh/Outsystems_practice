@@ -12,7 +12,7 @@
 - [Day 3: Entity 1:1 관계 및 CRUD (상세 화면 / 저장 / 삭제)](#-day-3-entity-11-관계-및-crud-상세-화면--저장--삭제)
 - [Day 4: 대시보드 레이아웃 및 위젯/액션 실습](#-day-4-대시보드-레이아웃-및-위젯액션-실습)
 - [Day 5: 엔터티 관계(1:N, N:1) 및 마스터-디테일 CRUD 종합 실습](#-day-5-엔터티-관계1n-n1-마스터-디테일-crud-종합-실습)
-
+- [Day 6: Entity 1:1 관계 상세 화면 및 참조 무결성 삭제 제어 실습](#-day-6-entity-11-관계-상세-화면-및-참조-무결성-삭제-제어-실습)
 
 ---
 
@@ -21,9 +21,9 @@
 Aggregate의 Filter 기능, 변수(Local Variable) 바인딩, 그리고 `Refresh Data` 액션을 활용하여 검색 및 동적 데이터 조회 기능을 구현했습니다.
 
 ### 🔗 실습 결과 링크
-- **Customer Main Page** 👉 [결과 화면 보기](https://personal-fdeqhkkx.outsystemscloud.com/CustomerMainPage/?_ts=639281000459416485)  
+- **Customer Main Page** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/CustomerMainPage/?_ts=639281000459416485" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
   * 단일 키워드 기반 고객 이름 실시간 필터링 기능 구현
-- **Course Main Page** 👉 [결과 화면 보기](https://personal-fdeqhkkx.outsystemscloud.com/Course_Main/?_ts=639280999479179617)  
+- **Course Main Page** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/Course_Main/?_ts=639280999479179617" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
   * 키워드 및 상태(Dropdown) 복합 조건 필터링 및 데이터 갱신 기능 구현
 
 ### 🛠️ 핵심 구현 기능
@@ -62,7 +62,7 @@ Aggregate의 Filter 기능, 변수(Local Variable) 바인딩, 그리고 `Refresh
 Entity 간의 1:1 관계(Relationship)를 이해하고, Parameter를 활용한 화면 이동 및 데이터의 **C**reate / **R**ead / **U**pdate / **D**elete 액션을 구현했습니다.
 
 ### 🔗 실습 결과 링크
-- **Customer Management App** 👉 [결과 화면 보기](https://personal-fdeqhkkx.outsystemscloud.com/CustomerFrontend/)  
+- **Customer Management App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/CustomerFrontend/" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
   * 고객 목록 조회, 상세 정보 및 연관 정보 Form 조회/수정/삭제 기능 구현
 
 ### 🛠️ 핵심 구현 기능
@@ -100,9 +100,9 @@ Entity 간의 1:1 관계(Relationship)를 이해하고, Parameter를 활용한 �
 Container를 활용한 화면 레이아웃 구성, 집계 데이터 표현(Count), 그리고 위젯과 Local Variable 간의 바인딩 및 Client Action 상호작용을 실습했습니다.
 
 ### 🔗 실습 결과 링크
-- **Order Dashboard App** 👉 [결과 화면 보기](https://personal-fdeqhkkx.outsystemscloud.com/Order/?_ts=639281961359138569)  
+- **Order Dashboard App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/Order/?_ts=639281961359138569" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
   * 주문 대시보드 화면 구성, 총 주문 건수 집계, 상품명 링크 및 최근 주문 목록 구현
-- **Task Widget App** 👉 [결과 화면 보기](https://personal-fdeqhkkx.outsystemscloud.com/TaskWidget/?_ts=639281961979691147)  
+- **Task Widget App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/TaskWidget/?_ts=639281961979691147" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
   * 위젯 배치, Local Variable 바인딩 및 Client Action을 통한 동적 값 변경 확인
 
 ### 🛠️ 핵심 구현 기능
@@ -140,7 +140,7 @@ Container를 활용한 화면 레이아웃 구성, 집계 데이터 표현(Count
 Customer(9개 속성), Product, Order 간의 1:N(`Customer` → `Order`) 및 N:1(`Order` → `Product`) 관계를 설정하고, 마스터-디테일 구조의 통합 관리 및 연관 데이터 CUD 처리를 구현했습니다.
 
 ### 🔗 실습 결과 링크
-- **Customer & Order Management App** 👉 [결과 화면 보기](https://personal-fdeqhkkx.outsystemscloud.com/CustomerOrder/CustomerList?_ts=639281965115790557)  
+- **Customer & Order Management App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/CustomerOrder" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
   * 고객 목록 및 선택된 고객의 연관 주문 목록(카드 형태)을 연동하여 조회, 수정, 등록, 삭제 기능 구현
 
 ### 🛠️ 핵심 구현 기능
@@ -160,25 +160,69 @@ Customer(9개 속성), Product, Order 간의 1:N(`Customer` → `Order`) 및 N:1
 <summary><b>🔍 Day 5 상세 실습 시나리오 보기 (클릭)</b></summary>
 
 #### 🧩 Mission: Customer-Order 마스터 디테일 및 CRUD 종합 구현
-1. **데이터 모델링 확인**: Customer(9개 속성), Product, Order 엔터티 구조 및 1:N(`Customer`→`Order`), N:1(`Order`→`Product`) 관계 설정 확인
+1. **데이터 모델링 확인**: Customer(9개 속성), Product, Order 엔터티 구조 및 1:N(`Customer`→`Order`), N:1(`Order`→`Product`) 관계 설정 및 Delete Rule 확인
 2. **CustomerList 화면 구성**:
    - `GetCustomers` Aggregate 및 Table 위젯(Name, Email, Grade 컬럼) 배치
-   - Input Parameter `SelectedCustomerId` 및 Local Variable `CurrentCustomerId` 추가
+   - CustomerList에 Input Parameter `SelectedCustomerId` 및 Local Variable `CurrentCustomerId` 추가
 3. **고객 상세/등록 화면 (`CustomerDetail`) 구현**:
-   - Input Parameter `CustomerId` (`Mandatory=No`) 추가 및 Name 컬럼 Link 연결 (`+ 신규 등록` 버튼 포함, `CustomerId = NullIdentifier()`)
+   - CustomerDetail 화면 생성 및 Input Parameter `CustomerId` (`Customer Identifier`, `Mandatory=No`) 추가
+   - Name 컬럼을 Link(`CustomerDetail`)로 변경하고, 상단에 `+ 신규 등록` 버튼 배치 (`CustomerId = NullIdentifier()`)
    - `GetCustomerById` Aggregate 생성 (Filter: `Customer.Id = CustomerId`, Max Records=1)
-   - 8필드 Form 배치 및 Name·Email 필수값 검증(Validation) 설정
-   - **Save 액션**: `If Form.Valid` ➔ `CreateOrUpdateCustomer` ➔ Message ➔ Navigate to `CustomerList` (SelectedCustomerId 반환 ID 전달)
+   - CustomerDetail Form(8필드) 배치 및 Name·Email 필수값 Validation 설정
+   - **Save 액션**: `If Form.Valid` ➔ `CreateOrUpdateCustomer` ➔ Message ➔ Navigate to `CustomerList` (SelectedCustomerId = 반환 ID 전달)
 4. **목록 내 삭제 및 인터랙션 처리**:
-   - 목록의 Delete 컬럼을 통한 `DeleteCustomer` 서버 액션 실행 및 `GetCustomers` 갱신
+   - 목록 Delete 컬럼 추가 ➔ `DeleteCustomer` 서버 액션 연동 ➔ `GetCustomers` 새로고침
    - 행 클릭 시 `SelectCustomerOnClick`: `CurrentCustomerId` Assign ➔ `GetOrdersByCustomerId` 새로고침 (오른쪽 패널 표출)
    - 우측 패널 If 분기 처리: 미선택 시(`CurrentCustomerId = NullIdentifier()`) 안내 문구 및 주문 없음(`List.Empty`) 안내 문구 표시
 5. **주문 카드 목록 및 상세(`OrderDetail`) 연동**:
-   - 우측 패널에 주문 카드 List(Product.Name, Quantity, Status, Price) 배치 및 카드별 Delete 기능 구현 (`DeleteOrder` 서버 액션 ➔ `GetOrdersByCustomerId` 갱신)
-   - `+ 주문 추가` 버튼을 통해 `OrderDetail` 화면 이동
+   - 주문 카드 List(Product.Name, Quantity, Status, Price) 배치 및 카드 Delete (`DeleteOrder` 서버 액션 ➔ `GetOrdersByCustomerId` 새로고침)
+   - `+ 주문 추가` 버튼 클릭 시 `OrderDetail` 화면 이동
    - `OrderDetail` 화면 구성: Input 파라미터(`OrderId`, `CustomerId`), `GetOrderById`, `GetProducts` (드롭다운 소스) Aggregate 배치
-   - Form 구성: Product 드롭다운(`Source=GetProducts.List`), Quantity, Status 배치
+   - Form 구성: Product Dropdown(`Source=GetProducts.List`), Quantity, Status 배치
    - **Save 주문 액션**: `If Form.Valid` ➔ `Order.CustomerId` Assign ➔ `CreateOrUpdateOrder` ➔ Navigate to `CustomerList` (SelectedCustomerId 전달)
+
+</details>
+
+---
+
+## 📌 Day 6: Entity 1:1 관계 상세 화면 및 참조 무결성 삭제 제어 실습
+
+Customer와 CustomerDetail 간의 1:1 관계 모델링을 이해하고, 상세 화면 분기 처리와 연관 엔티티 간 참조 무결성을 고려한 삭제(Delete) 순서 제어 로직을 구현했습니다.
+
+### 🔗 실습 결과 링크
+- **Customer 1:1 Detail Practice App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/OutsystemsPractice6/" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+  * 1:1 관계로 연결된 고객 기본/상세 정보 조회, 수정, 그리고 안전한 순서의 데이터 삭제 처리 구현
+
+### 🛠️ 핵심 구현 기능
+- **1:1 관계 엔티티 구성 및 화면 이동 (`CustomerList`)**
+  - Customer와 CustomerDetail 엔티티 속성 및 1:1 관계 설정 확인
+  - Table 위젯의 Name 컬럼을 Link로 변경하여 `CustomerDetail` 화면으로 이동 (`CustomerId = GetCustomers.List.Current.Customer.Id`)
+- **다중 Aggregate 바인딩 및 상세 Form 구성 (`CustomerDetail`)**
+  - Input Parameter `CustomerId` (`Mandatory`) 설정
+  - 두 개의 Aggregate (`GetCustomerById`, `GetCustomerDetailByCustomerId`)를 각각 생성하여 Filter 조건 적용 (`Max Records=1`)
+  - 기본 정보 및 상세 정보 Form을 배치하고 두 Aggregate의 Current 레코드 각각 바인딩
+- **참조 무결성을 고려한 CRUD 처리 (`Save` & `Delete`)**
+  - **Save**: `Form.Valid` 검증 후 `UpdateCustomer`와 `UpdateCustomerDetail` 연속 실행 ➔ Feedback Message ➔ `CustomerList`로 이동
+  - **Delete**: FK 관계로 묶인 두 엔티티의 참조 무결성을 고려하여 **`DeleteCustomerDetail` 후 `DeleteCustomer`를 실행하는 순서 제어** 구현
+
+<details>
+<summary><b>🔍 Day 6 상세 실습 시나리오 보기 (클릭)</b></summary>
+
+#### 🧩 Mission: Customer 1:1 관계 상세 및 삭제 순서 제어 구현
+1. **엔티티 관계 확인**: Customer / CustomerDetail Entity 속성 및 1:1 관계 설정 확인
+2. **CustomerList 화면 구성**:
+   - `GetCustomers` Aggregate 생성 및 Table 위젯 배치
+3. **CustomerDetail 화면 및 파라미터 연동**:
+   - CustomerDetail 화면 생성 및 Input Parameter `CustomerId` (Customer Identifier, Mandatory) 추가
+   - Table의 Name 컬럼을 Link로 변경 (Destination: `CustomerDetail`, Parameter: `GetCustomers.List.Current.Customer.Id`)
+4. **Aggregate 및 Form 바인딩**:
+   - `GetCustomerById` Aggregate 생성 (Filter: `CustomerId = CustomerId`, Max Records=1)
+   - `GetCustomerDetailByCustomerId` Aggregate 생성 (Filter: `CustomerDetail.CustomerId = CustomerId`, Max Records=1)
+   - 기본/상세 정보 Form 배치 후 두 Aggregate의 Current 레코드를 각각 바인딩
+5. **Save 액션 구현**:
+   - `If Form.Valid` ➔ `UpdateCustomer` ➔ `UpdateCustomerDetail` ➔ Feedback Message ➔ Navigate to `CustomerList`
+6. **Delete 액션 구현 (참조 무결성 제어)**:
+   - `DeleteCustomerDetail` ➔ `DeleteCustomer` ➔ Feedback Message ➔ Navigate to `CustomerList` (**삭제 순서가 매우 중요**)
 
 </details>
 
