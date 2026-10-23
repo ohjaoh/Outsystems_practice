@@ -12,7 +12,9 @@
 - [Day 3: Entity 1:1 관계 및 CRUD (상세 화면 / 저장 / 삭제)](#-day-3-entity-11-관계-및-crud-상세-화면--저장--삭제)
 - [Day 4: 대시보드 레이아웃 및 위젯/액션 실습](#-day-4-대시보드-레이아웃-및-위젯액션-실습)
 - [Day 5: 엔터티 관계(1:N, N:1) 및 마스터-디테일 CRUD 종합 실습](#-day-5-엔터티-관계1n-n1-마스터-디테일-crud-종합-실습)
-- [Day 6: Entity 1:1 관계 상세 화면 및 참조 무결성 삭제 제어 실습](#-day-6-entity-11-관계-상세-화면-및-참조-무결성-삭제-제어-실습)
+- [Day 6: Entity 1:1 관계 상세 화면 및 참조 무결성 삭제 제어 실습](#-day-6-entity-1:1-관계-상세-화면-및-참조-무결성-삭제-제어-실습)
+- [Day 7: 장바구니(Cart) 다중 선택, 페이징 및 자바스크립트 연동 실습](#-day-7-장바구니cart-다중-선택-페이징-및-자바스크립트-연동-실습)
+
 
 ---
 
@@ -21,9 +23,9 @@
 Aggregate의 Filter 기능, 변수(Local Variable) 바인딩, 그리고 `Refresh Data` 액션을 활용하여 검색 및 동적 데이터 조회 기능을 구현했습니다.
 
 ### 🔗 실습 결과 링크
-- **Customer Main Page** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/CustomerMainPage/?_ts=639281000459416485" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+- **Customer Main Page** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/CustomerMainPage" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
   * 단일 키워드 기반 고객 이름 실시간 필터링 기능 구현
-- **Course Main Page** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/Course_Main/?_ts=639280999479179617" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+- **Course Main Page** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/Course_Main" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
   * 키워드 및 상태(Dropdown) 복합 조건 필터링 및 데이터 갱신 기능 구현
 
 ### 🛠️ 핵심 구현 기능
@@ -100,9 +102,9 @@ Entity 간의 1:1 관계(Relationship)를 이해하고, Parameter를 활용한 �
 Container를 활용한 화면 레이아웃 구성, 집계 데이터 표현(Count), 그리고 위젯과 Local Variable 간의 바인딩 및 Client Action 상호작용을 실습했습니다.
 
 ### 🔗 실습 결과 링크
-- **Order Dashboard App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/Order/?_ts=639281961359138569" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+- **Order Dashboard App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/Order" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
   * 주문 대시보드 화면 구성, 총 주문 건수 집계, 상품명 링크 및 최근 주문 목록 구현
-- **Task Widget App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/TaskWidget/?_ts=639281961979691147" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+- **Task Widget App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/TaskWidget" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
   * 위젯 배치, Local Variable 바인딩 및 Client Action을 통한 동적 값 변경 확인
 
 ### 🛠️ 핵심 구현 기능
@@ -223,6 +225,58 @@ Customer와 CustomerDetail 간의 1:1 관계 모델링을 이해하고, 상세 �
    - `If Form.Valid` ➔ `UpdateCustomer` ➔ `UpdateCustomerDetail` ➔ Feedback Message ➔ Navigate to `CustomerList`
 6. **Delete 액션 구현 (참조 무결성 제어)**:
    - `DeleteCustomerDetail` ➔ `DeleteCustomer` ➔ Feedback Message ➔ Navigate to `CustomerList` (**삭제 순서가 매우 중요**)
+
+</details>
+
+---
+
+## 📌 Day 7: 장바구니(Cart) 다중 선택, 페이징 및 자바스크립트 연동 실습
+
+Customer, Product, Cart 엔터티 간의 관계(`Cart` → `Customer` N:1, `Cart` → `Product` N:1)를 설정하고, 체크박스 다중 선택, 페이징네이션, JavaScript를 활용한 컨펌 다이얼로그 및 장바구니 저장/관리 기능을 구현했습니다.
+
+### 🔗 실습 결과 링크
+- **Cart & Order App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/CartOrderApp/" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+  * 상품 목록 다중 선택(페이지 유지), 페이징, JavaScript 확인창 연동 및 장바구니 일괄 저장/상세 내역 관리 구현
+
+### 🛠️ 핵심 구현 기능
+- **다중 선택 상태 유지 및 페이징네이션 (`CartOrder`)**
+  - 상품 20건 Excel Bootstrap 및 페이징 처리를 위한 `GetProducts` Aggregate (`Max Records=PageSize`, `Start Index=(CurrentPage-1)*PageSize`) 구성
+  - 체크박스 상태 관리를 위해 `SelectedProductIds` (Product Id List) Local Variable 활용 (`ListIndexOf` 검증 및 `ToggleSelect` 액션을 통한 페이지 이동 시 선택 유지 구현)
+- **JavaScript 노드를 활용한 커스텀 컨펌 다이얼로그**
+  - `ConfirmDialog` 클라이언트 액션 내 JavaScript 노드 작성 (`$parameters.Result = confirm($parameters.Message);`)을 통해 브라우저 기본 확인창 연동
+- **장바구니 추가/제거 및 일괄 저장 처리**
+  - `+` 버튼(`AddToCartOnClick`): 확인창 호출 ➔ True 시 루프(`GetAllProducts.List`)를 돌며 체크된 상품을 `CartList`에 추가 및 선택 초기화
+  - `-` 버튼(`RemoveFromCartOnClick`): 장바구니에서 체크된 상품 제거
+  - `SAVE` 버튼(`SaveCartOnClick`): 확인창 호출 ➔ `SaveCart` 서버 액션(`CustomerId`와 상품 리스트를 전체 Cart 행으로 저장) 실행 ➔ `CartList` 비움
+- **장바구니 상세 및 개별 삭제 (`CartDetail`)**
+  - 우상단 '장바구니 상세' 링크를 통해 `CartDetail` 화면 이동 (`CustomerId=SelectedCustomerId` 파라미터 전달)
+  - `GetCartByCustomer` (Cart + Product Join)를 활용한 내역 조회 및 각 행별 삭제 버튼(`DeleteCart` 서버 액션 및 데이터 새로고침) 구현
+
+<details>
+<summary><b>🔍 Day 7 상세 실습 시나리오 보기 (클릭)</b></summary>
+
+#### 🧩 Mission: Cart 다중 선택, 페이징 및 저장/상세 관리 구현
+1. **엔티티 모델링 및 데이터 Bootstrap**:
+   - Customer / Product / Cart 엔터티 생성 및 관계 설정 확인 (`Cart`→`Customer` N:1, `Cart`→`Product` N:1, Delete Rule 확인)
+   - Product 20건 및 Customer 시드 데이터 Excel Bootstrap 실행 (페이지네이션·드롭다운 테스트용)
+2. **CartOrder 화면 및 변수 선언**:
+   - Local Variables: `SelectedCustomerId`, `SelectedProductIds` (Product Id List), `CartList` (Product List), `CurrentPage=1`, `PageSize=10`
+   - 상단 고객 Dropdown: Source=`GetCustomers.List`, 표시=`Customer.Name`, 값=`SelectedCustomerId`
+3. **상품 목록 페이징 및 체크박스 인터랙션**:
+   - `GetProducts` Aggregate (`Max Records=PageSize`, `Start Index=(CurrentPage-1)*PageSize`), `GetAllProducts`, `GetProductCount` 생성
+   - 왼쪽 상품 Table 배치: 첫 컬럼에 체크박스 배치 (`Checked=ListIndexOf(SelectedProductIds, Product.Id)>=0`, `OnChange=ToggleSelect`)
+   - `ToggleSelect` 스크린 액션: `SelectedProductIds`에 ProductId 추가/제거 (페이지를 넘겨도 선택 상태가 유지되도록 구현)
+   - 페이징네이션 구현 (10개/페이지, 1~N 버튼, 이전/다음) ➔ `GoToPage` ➔ `Refresh Data(GetProducts)`
+4. **JavaScript 다이얼로그 및 장바구니 담기/빼기**:
+   - `ConfirmDialog` 클라이언트 액션 구현 및 JavaScript 노드 추가: `$parameters.Result = confirm($parameters.Message);` (Output: `Confirmed` Boolean 반환)
+   - `+` 버튼 (`AddToCartOnClick`): `ConfirmDialog("장바구니에 등록하시겠습니까?")` ➔ True 시 Loop(`GetAllProducts.List`)를 돌며 체크 상품을 `CartList`에 추가 후 체크 해제
+   - `-` 버튼 (`RemoveFromCartOnClick`): 장바구니에서 체크된 상품 제거
+5. **장바구니 저장 및 상세 (`CartDetail`) 연동**:
+   - 오른쪽 장바구니 Table 배치: Source=`CartList` (상품명, 단가, 합계)
+   - Cart 엔터티 + `SaveCart` 서버 액션 생성 (Input: `CustomerId`, `Products=Product List` ➔ 리스트 전체를 Cart 행으로 저장)
+   - `SAVE` 버튼 (`SaveCartOnClick`): `ConfirmDialog("저장하시겠습니까?")` ➔ True 시 `SaveCart(SelectedCustomerId, CartList)` 실행 ➔ 메시지 표시 ➔ `CartList` 비움
+   - 우상단 '장바구니 상세' 링크: `CartDetail` 화면 이동 (`CustomerId=SelectedCustomerId` 파라미터 전달)
+   - `CartDetail` 화면 구성: `GetCartByCustomer` (Cart + Product Join) Aggregate를 이용해 내역 표시, 각 상품 행 끝 삭제 버튼 ➔ `DeleteCart` 서버 액션 ➔ `Refresh Data(GetCartByCustomer)` 연동
 
 </details>
 
