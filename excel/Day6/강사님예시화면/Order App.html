@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Order App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#1068EB; --primary-light:#E7F0FD; --bg:#F4F5F7; --surface:#FFFFFF; --ink:#1F2329; --muted:#6B7480;
+  --border:#E1E4E8; --border-strong:#C9CED6; --error:#DC2B1E;
+  --font:"Roboto","Noto Sans KR",-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --primary:#4D8FF5; --primary-light:#1A2A45; --bg:#14171C; --surface:#1D2128; --ink:#E8EAED; --muted:#949CA8;
+  --border:#2E343D; --border-strong:#434B57; --error:#F06358; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --primary:#4D8FF5; --primary-light:#1A2A45; --bg:#14171C; --surface:#1D2128; --ink:#E8EAED; --muted:#949CA8;
+  --border:#2E343D; --border-strong:#434B57; --error:#F06358; color-scheme:dark;}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.5}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+
+.header{position:sticky;top:0;z-index:50;background:var(--surface);border-bottom:1px solid var(--border);padding-top:env(safe-area-inset-top,0px)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--surface)}
+.header-in{max-width:1100px;margin:0 auto;height:56px;padding:0 20px;display:flex;align-items:center;gap:28px}
+.logo{font-weight:700;font-size:16px;color:var(--ink);text-decoration:none}
+.menu{display:flex;height:100%;gap:4px}
+.menu a{display:flex;align-items:center;padding:0 12px;color:var(--muted);text-decoration:none;font-weight:500;border-bottom:2px solid transparent}
+.menu a.active{color:var(--primary);border-bottom-color:var(--primary)}
+@media (max-width:520px){.header-in{gap:12px}.menu a{padding:0 8px}}
+
+.main{max-width:1100px;margin:0 auto;padding:24px 20px 48px}
+h1{margin:0 0 16px;font-size:24px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.head h1{margin:0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:4px;margin-bottom:20px}
+.card h2{margin:0;padding:14px 20px;font-size:16px;border-bottom:1px solid var(--border)}
+.pad{padding:16px 20px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;padding:14px 20px;border-bottom:1px solid var(--border)}
+.bar .input{flex:1 1 200px;max-width:300px}
+.bar select{width:auto;min-width:130px}
+
+.input,select{height:40px;padding:0 10px;border:1px solid var(--border-strong);border-radius:4px;background:var(--surface);width:100%}
+.input:focus,select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+.input.bad,select.bad{border-color:var(--error)}
+label{display:block;font-weight:500;margin-bottom:6px}
+.row{margin-bottom:14px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media (max-width:600px){.fields{grid-template-columns:1fr}}
+.btn{height:40px;padding:0 18px;border-radius:4px;border:1px solid var(--border-strong);background:var(--surface);cursor:pointer;font-weight:500;text-decoration:none;display:inline-flex;align-items:center}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn.danger{color:var(--error)}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12.5px;font-weight:500;color:var(--muted);padding:10px 16px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:11px 16px;border-bottom:1px solid var(--border);white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}
+.r{text-align:right;font-variant-numeric:tabular-nums}
+a.link,button.link{color:var(--primary);background:none;border:0;padding:0;cursor:pointer;text-decoration:none;font-weight:500}
+a.link:hover,button.link:hover{text-decoration:underline}
+button.link.danger{color:var(--error)}
+.empty{text-align:center;color:var(--muted);padding:28px 16px}
+.count{padding:10px 16px;color:var(--muted);font-size:13px;border-top:1px solid var(--border)}
+
+.two{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.two{grid-template-columns:minmax(0,1fr)}}
+.two .card{margin-bottom:0}
+.order-line{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.order-line .row{margin:0}
+.order-line .grow{flex:1 1 220px}
+.order-line .qty{width:90px}
+.back{display:inline-block;margin-bottom:8px;color:var(--primary);text-decoration:none;font-weight:500}
+
+/* Feedback Message */
+.feedback{position:fixed;top:calc(env(safe-area-inset-top,0px) + 12px);left:50%;transform:translateX(-50%);z-index:100;display:flex;flex-direction:column;gap:8px;width:min(440px,calc(100% - 24px));pointer-events:none}
+.fm{pointer-events:auto;padding:13px 16px;border-radius:4px;color:#fff;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.2);animation:in .2s ease-out}
+.fm.success{background:#048604}.fm.warning{background:#C27A00}.fm.info{background:#1068EB}
+@keyframes in{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fm{animation:none}}
+.foot{max-width:1100px;margin:0 auto;padding:0 20px 28px;color:var(--muted);font-size:12.5px}
+.foot button{background:none;border:0;padding:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:12.5px}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-in">
+    <a class="logo" href="#/orders">Order App</a>
+    <nav class="menu">
+      <a href="#/orders" data-nav="orders">주문 현황</a>
+      <a href="#/products" data-nav="products">상품</a>
+      <a href="#/customers" data-nav="customers">고객</a>
+    </nav>
+  </div>
+</header>
+<div class="feedback" id="feedback" aria-live="polite"></div>
+
+<main class="main">
+
+<!-- 주문 현황 -->
+<section class="view" id="v-orders">
+  <h1>주문 현황</h1>
+  <div class="card">
+    <div class="bar">
+      <input class="input" id="oKw" type="search" placeholder="상품명 또는 고객명">
+      <select id="oStatus"><option value="">전체 상태</option><option>준비중</option><option>배송중</option><option>완료</option></select>
+      <button class="btn primary" id="oSearch">검색</button>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>상품</th><th>고객</th><th class="r">수량</th><th class="r">금액</th><th>상태</th><th class="r">주문일</th></tr></thead>
+      <tbody id="oBody"></tbody>
+    </table></div>
+    <div class="count" id="oCount"></div>
+  </div>
+</section>
+
+<!-- 상품 -->
+<section class="view" id="v-products" hidden>
+  <h1>상품</h1>
+  <div class="two">
+    <div class="card">
+      <div class="tbl"><table>
+        <thead><tr><th>상품명</th><th>카테고리</th><th class="r">가격</th><th></th></tr></thead>
+        <tbody id="pBody"></tbody>
+      </table></div>
+      <div class="count" id="pCount"></div>
+    </div>
+    <div class="card">
+      <h2 id="pTitle">상품 등록</h2>
+      <div class="pad">
+        <div class="row"><label for="pName">상품명 *</label><input class="input" id="pName"></div>
+        <div class="row"><label for="pPrice">가격 *</label><input class="input" id="pPrice" type="number" min="0"></div>
+        <div class="row"><label for="pCat">카테고리 *</label><select id="pCat"></select></div>
+        <div class="btns"><button class="btn primary" id="pSave">저장</button><button class="btn" id="pNew">새로 입력</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 고객 목록 -->
+<section class="view" id="v-customers" hidden>
+  <div class="head"><h1>고객</h1><a class="btn primary" href="#/customers/new">새 고객</a></div>
+  <div class="card">
+    <div class="bar">
+      <input class="input" id="cKw" type="search" placeholder="고객명 검색">
+      <select id="cGrade"></select>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>고객명</th><th>이메일</th><th>전화번호</th><th>등급</th><th class="r">가입일</th></tr></thead>
+      <tbody id="cBody"></tbody>
+    </table></div>
+    <div class="count" id="cCount"></div>
+  </div>
+</section>
+
+<!-- 고객 상세 -->
+<section class="view" id="v-customer" hidden>
+  <a class="back" href="#/customers">‹ 고객 목록</a>
+  <h1 id="cdTitle">고객 상세</h1>
+  <div class="card">
+    <div class="pad">
+      <div class="fields">
+        <div class="row"><label for="dName">고객명 *</label><input class="input" id="dName"></div>
+        <div class="row"><label for="dEmail">이메일 *</label><input class="input" id="dEmail" type="email"></div>
+        <div class="row"><label for="dPhone">전화번호</label><input class="input" id="dPhone"></div>
+        <div class="row"><label for="dGrade">등급 *</label><select id="dGrade"></select></div>
+        <div class="row"><label for="dDate">가입일 *</label><input class="input" id="dDate" type="date"></div>
+      </div>
+      <div class="btns"><button class="btn primary" id="dSave">저장</button><a class="btn" href="#/customers">목록으로</a><button class="btn danger" id="dDel">삭제</button></div>
+    </div>
+  </div>
+  <div id="dOrderArea">
+    <div class="card">
+      <h2>주문하기</h2>
+      <div class="pad order-line">
+        <div class="row grow"><label for="odProd">상품</label><select id="odProd"></select></div>
+        <div class="row qty"><label for="odQty">수량</label><input class="input" id="odQty" type="number" min="1" value="1"></div>
+        <button class="btn primary" id="odBtn">주문</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>주문 내역</h2>
+      <div class="tbl"><table>
+        <thead><tr><th>상품</th><th class="r">수량</th><th class="r">금액</th><th>상태</th><th class="r">주문일</th></tr></thead>
+        <tbody id="dOrders"></tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+</main>
+
+
+<script>
+/* ===== 엔티티 샘플 데이터 (Bootstrap 엑셀) ===== */
+const SAMPLE = {
+  Order: [["키보드 세트","Anthony",89000,"완료","2026-06-30"],["모니터 27\"","Bradley",320000,"배송중","2026-06-28"],["USB 허브","Catherine",24000,"준비중","2026-06-25"],["노트북 스탠드","David",45000,"완료","2026-06-22"],["웹캠 Full HD","Emma",67000,"준비중","2026-06-19"],["무선 마우스","Frank",29000,"완료","2026-06-15"],["도킹 스테이션","Grace",158000,"배송중","2026-06-11"],["게이밍 헤드셋","Henry",112000,"준비중","2026-06-05"]]
+    .map((r,i)=>({Id:i+1,ProductName:r[0],CustomerName:r[1],Quantity:1,Amount:r[2],Status:r[3],OrderDate:r[4]})),
+  Product: [["무선 키보드",89000,"주변기기"],["USB-C 허브",45000,"주변기기"],["27인치 모니터",329000,"디스플레이"],["노트북 스탠드",39000,"액세서리"],["게이밍 마우스",59000,"주변기기"],["웹캠 FHD",72000,"주변기기"],["노이즈캔슬링 헤드셋",219000,"오디오"],["외장 SSD 1TB",149000,"저장장치"]]
+    .map((r,i)=>({Id:i+1,Name:r[0],Price:r[1],Category:r[2]})),
+  Customer: [["(주)테크솔루션","user1@example.com","02-1137-5321","VIP","2026-01-01"],["스마트미디어","user2@example.com","031-1274-9642","Gold","2026-01-16"],["글로벌파트너스","user3@example.com","032-1411-4963","Silver","2026-01-31"],["대한물류","user4@example.com","051-1548-9284","Bronze","2026-02-15"],["네오시스템즈","user5@example.com","053-1685-4605","일반","2026-03-02"],["한빛소프트","user6@example.com","010-1822-8926","VIP","2026-03-17"],["미래에너지","user7@example.com","02-1959-4247","Gold","2026-04-01"],["블루오션테크","user8@example.com","031-2096-8568","Silver","2026-04-16"],["정원무역","user9@example.com","032-2233-3889","Bronze","2026-05-01"],["우리아이티","user10@example.com","051-2370-8210","일반","2026-05-16"]]
+    .map((r,i)=>({Id:i+1,CustomerName:r[0],Email:r[1],Phone:r[2],Grade:r[3],RegisterDate:r[4]}))
+};
+const CATEGORIES = ["주변기기","디스플레이","액세서리","오디오","저장장치"];
+const GRADES = ["VIP","Gold","Silver","Bronze","일반"];
+
+/* ===== 저장소 ===== */
+const KEY = "orderapp.beginner.v1";
+let DB;
+try { DB = JSON.parse(localStorage.getItem(KEY)); } catch(e) {}
+if (!DB || !DB.Order) DB = structuredClone(SAMPLE);
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch(e) {} }
+const newId = list => list.reduce((m,x)=>Math.max(m,x.Id),0) + 1;
+
+/* ===== 공통 ===== */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const won = n => "₩" + Number(n).toLocaleString("ko-KR");
+const today = () => { const d = new Date(); return new Date(d - d.getTimezoneOffset()*6e4).toISOString().slice(0,10); };
+const options = (list, first) => (first!==undefined ? `<option value="">${first}</option>` : "") + list.map(v=>`<option>${esc(v)}</option>`).join("");
+function Message(text, type){
+  const el = document.createElement("div");
+  el.className = "fm " + type; el.textContent = text;
+  $("feedback").prepend(el);
+  setTimeout(()=>el.remove(), 3000);
+}
+function required(ids){
+  let ok = true;
+  ids.forEach(id => { const empty = !$(id).value.trim(); $(id).classList.toggle("bad", empty); if (empty) ok = false; });
+  if (!ok) Message("필수 항목을 입력해 주세요", "warning");
+  return ok;
+}
+document.addEventListener("input", e => e.target.classList?.remove("bad"));
+
+/* ===== 주문 현황 ===== */
+let oFilter = { kw:"", status:"" };
+function showOrders(){
+  const kw = oFilter.kw.toLowerCase();
+  const list = DB.Order
+    .filter(o => (!kw || o.ProductName.toLowerCase().includes(kw) || o.CustomerName.toLowerCase().includes(kw)) && (!oFilter.status || o.Status===oFilter.status))
+    .sort((a,b)=> b.OrderDate.localeCompare(a.OrderDate) || b.Id-a.Id);
+  $("oBody").innerHTML = list.map(o=>`<tr><td>${esc(o.ProductName)}</td><td>${esc(o.CustomerName)}</td><td class="r">${o.Quantity}</td><td class="r">${won(o.Amount)}</td><td>${esc(o.Status)}</td><td class="r">${o.OrderDate}</td></tr>`).join("")
+    || `<tr><td colspan="6" class="empty">조건에 맞는 주문이 없습니다</td></tr>`;
+  $("oCount").textContent = `총 ${list.length}건`;
+}
+$("oSearch").onclick = () => { oFilter.kw = $("oKw").value.trim(); showOrders(); };
+$("oKw").addEventListener("keydown", e => { if (e.key==="Enter") $("oSearch").click(); });
+$("oStatus").onchange = () => { oFilter.status = $("oStatus").value; showOrders(); };
+
+/* ===== 상품 ===== */
+let editProductId = null;
+$("pCat").innerHTML = options(CATEGORIES, "선택하세요");
+function showProducts(){
+  $("pBody").innerHTML = DB.Product.map(p=>`<tr>
+      <td><button class="link" data-edit="${p.Id}">${esc(p.Name)}</button></td><td>${esc(p.Category)}</td><td class="r">${won(p.Price)}</td>
+      <td class="r"><button class="link danger" data-del="${p.Id}">삭제</button></td></tr>`).join("")
+    || `<tr><td colspan="4" class="empty">등록된 상품이 없습니다</td></tr>`;
+  $("pCount").textContent = `총 ${DB.Product.length}개`;
+}
+function clearProductForm(){
+  editProductId = null; $("pTitle").textContent = "상품 등록";
+  $("pName").value = ""; $("pPrice").value = ""; $("pCat").value = "";
+  ["pName","pPrice","pCat"].forEach(id=>$(id).classList.remove("bad"));
+}
+$("pBody").onclick = e => {
+  const ed = e.target.closest("[data-edit]"), del = e.target.closest("[data-del]");
+  if (ed){
+    const p = DB.Product.find(x=>x.Id===+ed.dataset.edit);
+    editProductId = p.Id; $("pTitle").textContent = "상품 수정";
+    $("pName").value = p.Name; $("pPrice").value = p.Price; $("pCat").value = p.Category;
+  }
+  if (del){
+    DB.Product = DB.Product.filter(x=>x.Id!==+del.dataset.del); save();
+    if (editProductId===+del.dataset.del) clearProductForm();
+    showProducts(); Message("상품을 삭제했습니다", "success");
+  }
+};
+$("pSave").onclick = () => {
+  if (!required(["pName","pPrice","pCat"])) return;
+  const data = { Name:$("pName").value.trim(), Price:Number($("pPrice").value), Category:$("pCat").value };
+  if (editProductId) Object.assign(DB.Product.find(x=>x.Id===editProductId), data);
+  else DB.Product.push({ Id:newId(DB.Product), ...data });
+  save(); clearProductForm(); showProducts(); Message("상품을 저장했습니다", "success");
+};
+$("pNew").onclick = clearProductForm;
+
+/* ===== 고객 목록 ===== */
+$("cGrade").innerHTML = options(GRADES, "전체 등급");
+function showCustomers(){
+  const kw = $("cKw").value.trim().toLowerCase(), grade = $("cGrade").value;
+  const list = DB.Customer.filter(c => (!kw || c.CustomerName.toLowerCase().includes(kw)) && (!grade || c.Grade===grade));
+  $("cBody").innerHTML = list.map(c=>`<tr><td><a class="link" href="#/customers/${c.Id}">${esc(c.CustomerName)}</a></td><td>${esc(c.Email)}</td><td>${esc(c.Phone)}</td><td>${esc(c.Grade)}</td><td class="r">${c.RegisterDate}</td></tr>`).join("")
+    || `<tr><td colspan="5" class="empty">조건에 맞는 고객이 없습니다</td></tr>`;
+  $("cCount").textContent = `총 ${list.length}명`;
+}
+$("cKw").oninput = showCustomers;
+$("cGrade").onchange = showCustomers;
+
+/* ===== 고객 상세 + 주문하기 ===== */
+let customerId = null;
+$("dGrade").innerHTML = options(GRADES, "선택하세요");
+function showCustomer(id){
+  const c = DB.Customer.find(x=>x.Id===+id) || null;
+  if (id!=="new" && !c){ location.hash = "#/customers"; return false; }
+  customerId = c ? c.Id : null;
+  $("cdTitle").textContent = c ? c.CustomerName : "새 고객";
+  $("dName").value = c ? c.CustomerName : ""; $("dEmail").value = c ? c.Email : ""; $("dPhone").value = c ? c.Phone : "";
+  $("dGrade").value = c ? c.Grade : ""; $("dDate").value = c ? c.RegisterDate : today();
+  ["dName","dEmail","dGrade","dDate"].forEach(i=>$(i).classList.remove("bad"));
+  $("dDel").hidden = !c; $("dOrderArea").hidden = !c;
+  if (c){
+    $("odProd").innerHTML = `<option value="">선택하세요</option>` + DB.Product.map(p=>`<option value="${p.Id}">${esc(p.Name)} (${won(p.Price)})</option>`).join("");
+    $("odQty").value = 1;
+    showCustomerOrders();
+  }
+  return true;
+}
+function showCustomerOrders(){
+  const c = DB.Customer.find(x=>x.Id===customerId);
+  const list = DB.Order.filter(o=>o.CustomerName===c.CustomerName).sort((a,b)=>b.Id-a.Id);
+  $("dOrders").innerHTML = list.map(o=>`<tr><td>${esc(o.ProductName)}</td><td class="r">${o.Quantity}</td><td class="r">${won(o.Amount)}</td><td>${esc(o.Status)}</td><td class="r">${o.OrderDate}</td></tr>`).join("")
+}
+$("dSave").onclick = () => {
+  if (!required(["dName","dEmail","dGrade","dDate"])) return;
+  const data = { CustomerName:$("dName").value.trim(), Email:$("dEmail").value.trim(), Phone:$("dPhone").value.trim(), Grade:$("dGrade").value, RegisterDate:$("dDate").value };
+  if (customerId) Object.assign(DB.Customer.find(x=>x.Id===customerId), data);
+  else DB.Customer.push({ Id:newId(DB.Customer), ...data });
+  save(); Message("고객을 저장했습니다", "success"); location.hash = "#/customers";
+};
+$("dDel").onclick = () => {
+  DB.Customer = DB.Customer.filter(x=>x.Id!==customerId); save();
+  Message("고객을 삭제했습니다", "success"); location.hash = "#/customers";
+};
+$("odBtn").onclick = () => {
+  if (!required(["odProd","odQty"])) return;
+  const c = DB.Customer.find(x=>x.Id===customerId), p = DB.Product.find(x=>x.Id===+$("odProd").value);
+  const qty = Math.max(1, parseInt($("odQty").value,10) || 1);
+  DB.Order.push({ Id:newId(DB.Order), ProductName:p.Name, CustomerName:c.CustomerName, Quantity:qty, Amount:p.Price*qty, Status:"준비중", OrderDate:today() });
+  save(); $("odProd").value = ""; $("odQty").value = 1;
+  showCustomerOrders(); Message("주문했습니다", "success");
+};
+
+
+/* ===== 화면 이동 ===== */
+function route(){
+  const [page, id] = (location.hash.replace(/^#\/?/,"") || "orders").split("/");
+  let view = ["orders","products","customers"].includes(page) ? page : "orders";
+  if (view==="customers" && id){ if (!showCustomer(id)) return; view = "customer"; }
+  document.querySelectorAll(".view").forEach(v => v.hidden = v.id !== "v-"+view);
+  document.querySelectorAll("[data-nav]").forEach(a => a.classList.toggle("active", a.dataset.nav === (view==="customer" ? "customers" : view)));
+  if (view==="orders") showOrders();
+  if (view==="products") showProducts();
+  if (view==="customers") showCustomers();
+  window.scrollTo({top:0});
+}
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>

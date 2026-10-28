@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product Search</title>
+<style>
+  :root{--bg:#0b1020;--panel:#121829;--line:#232b40;--text:#e6e9f2;--sub:#7c859c;--blue:#3b6cf6;--chip:#16264a;--chipT:#8fb3ff;--red:#f2667a;--green:#3ecf8e}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,"Malgun Gothic",sans-serif;font-size:14px}
+  header{display:flex;align-items:center;gap:28px;padding:0 16px;border-bottom:1px solid var(--line);height:52px}
+  .logo{color:var(--blue);font-weight:700}
+  .tab{height:52px;display:flex;align-items:center;cursor:pointer;color:var(--sub);font-weight:600;border-bottom:2px solid transparent}
+  .tab.on{color:var(--text);border-color:var(--blue)}
+  .user{margin-left:auto;display:flex;gap:8px;align-items:center;color:var(--sub);font-size:12px}
+  main{padding:20px 16px;max-width:900px}
+  h1{font-size:20px;margin:0 0 4px}
+  .desc{color:var(--sub);font-size:12px;margin-bottom:16px}
+  .bar{display:flex;gap:8px;margin-bottom:16px}
+  select,input,button{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font:inherit}
+  input{flex:1;min-width:0}
+  button{cursor:pointer}
+  .btn{background:var(--blue);border:0;font-weight:700;padding:10px 20px}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+  .card b{display:block;font-size:16px;margin-top:4px}
+  .card span{color:var(--sub);font-size:12px}
+  table{width:100%;border-collapse:collapse}
+  th{background:var(--panel);color:var(--sub);font-weight:500;text-align:left;padding:10px 12px}
+  td{padding:12px;border-bottom:1px solid var(--line);font-weight:600}
+  .r{text-align:right}
+  .chip{background:var(--chip);color:var(--chipT);border:1px solid #2c4a8a;border-radius:999px;padding:3px 10px;font-size:12px}
+  a{color:var(--text);text-decoration:none;cursor:pointer}
+  a:hover{color:var(--blue)}
+  h3{font-size:14px;color:var(--sub);margin:24px 0 8px}
+  .box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px}
+  .deny{border-color:var(--red);color:var(--red)}
+  .ok{color:var(--green)}
+  .role{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px}
+  code{color:var(--chipT)}
+  @media(max-width:600px){.cards{grid-template-columns:repeat(2,1fr)}.bar{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">Product Search</span>
+  <span class="tab on" id="tSearch" onclick="go('search')">상품 검색</span>
+  <span class="tab" id="tRole" onclick="go('role')">권한 관리</span>
+  <span class="user">로그인: <select id="who" onchange="render()"></select></span>
+</header>
+
+<main id="app"></main>
+
+<script>
+/* ===== Entities (엑셀 데이터) ===== */
+const Category = ["주변기기","디스플레이","음향","저장장치","액세서리","케이블","전원"]
+  .map((Label,i)=>({Id:i+1,Label}));
+const Product = [
+ ["무선 키보드",1,89000],["기계식 키보드",1,119000],["텐키리스 키보드",1,76000],["기계식 마우스",1,62000],["무선 마우스",1,29000],
+ ["27\" 모니터",2,320000],["34\" 울트라와이드",2,590000],["휴대용 모니터 15.6\"",2,235000],
+ ["블루투스 헤드셋",3,129000],["2채널 스피커",3,68000],["사운드바",3,158000],
+ ["외장 SSD 1TB",4,145000],["USB 메모리 128GB",4,23000],["NVMe SSD 2TB",4,239000],
+ ["노트북 스탠드",5,38000],["데스크 매트",5,26000],["노트북 파우치",5,29000],["쿨링패드",5,47000],
+ ["HDMI 케이블 2m",6,12000],["USB-C 케이블 1m",6,9000],
+ ["멀티탭 6구",7,19000],["USB 충전기 65W",7,34000]
+].map(([Name,CategoryId,Price],i)=>({Id:i+1,Name,CategoryId,Price}));
+
+/* ===== O11 기본 User + Role (ProductDetailRole) ===== */
+const Users = [
+  {Id:1, Name:"admin", Roles:["ProductDetailRole"]},
+  {Id:2, Name:"user1", Roles:[]}
+];
+const CheckProductDetailRole = u => u.Roles.includes("ProductDetailRole");
+const GrantProductDetailRole  = u => { if(!CheckProductDetailRole(u)) u.Roles.push("ProductDetailRole"); };
+const RevokeProductDetailRole = u => { u.Roles = u.Roles.filter(r=>r!=="ProductDetailRole"); };
+
+/* ===== State ===== */
+let screen="search", catId=1, keyword="키보드", result=[], detailId=null;
+const won = n => "₩"+Math.round(n).toLocaleString();
+const catName = id => Category.find(c=>c.Id===id).Label;
+const me = () => Users[+document.getElementById("who").value];
+
+/* Data Action (On Demand): Category 필터 + Name LIKE */
+function refresh(){
+  result = Product.filter(p => (!catId || p.CategoryId===catId) && p.Name.includes(keyword));
+}
+
+function go(s,id){ screen=s; detailId=id??null; render(); }
+
+function render(){
+  document.getElementById("tSearch").className="tab"+(screen!=="role"?" on":"");
+  document.getElementById("tRole").className="tab"+(screen==="role"?" on":"");
+  const app=document.getElementById("app");
+  if(screen==="search") app.innerHTML=searchHTML();
+  if(screen==="detail") app.innerHTML=detailHTML();
+  if(screen==="role")   app.innerHTML=roleHTML();
+}
+
+/* --- 상품 검색 + 집계 --- */
+function searchHTML(){
+  const cnt=result.length, sum=result.reduce((a,p)=>a+p.Price,0);
+  const avg=cnt?sum/cnt:0, max=cnt?Math.max(...result.map(p=>p.Price)):0;
+  // Aggregate: GroupBy CategoryId (전체 상품 기준)
+  const group = Category.map(c=>{
+    const ps=Product.filter(p=>p.CategoryId===c.Id);
+    const s=ps.reduce((a,p)=>a+p.Price,0);
+    return {c,count:ps.length,sum:s,avg:s/ps.length};
+  });
+  return `
+  <h1>상품 검색</h1>
+  <div class="desc">분류 선택=즉시 필터 · 상품명 일부 입력 후 조회(LIKE) · Data Action(On Demand)</div>
+  <div class="bar">
+    <select onchange="catId=+this.value;refresh();render()">
+      <option value="0">분류: 전체</option>
+      ${Category.map(c=>`<option value="${c.Id}" ${c.Id===catId?"selected":""}>분류: ${c.Label}</option>`).join("")}
+    </select>
+    <input id="kw" value="${keyword}" placeholder="⌕ 상품명" onkeydown="if(event.key==='Enter')doSearch()">
+    <button class="btn" onclick="doSearch()">🔍 조회</button>
+  </div>
+  <div class="cards">
+    <div class="card"><span>건수 Count</span><b>${cnt}개</b></div>
+    <div class="card"><span>합계 Sum</span><b>${won(sum)}</b></div>
+    <div class="card"><span>평균 Avg</span><b>${won(avg)}</b></div>
+    <div class="card"><span>최고가 Max</span><b>${won(max)}</b></div>
+  </div>
+  <table>
+    <tr><th>상품명</th><th>분류</th><th class="r">단가</th></tr>
+    ${result.map(p=>`<tr><td><a onclick="go('detail',${p.Id})">${p.Name}</a></td>
+      <td><span class="chip">${catName(p.CategoryId)}</span></td><td class="r">${won(p.Price)}</td></tr>`).join("")
+      || `<tr><td colspan="3" style="color:var(--sub)">조회 결과가 없습니다.</td></tr>`}
+  </table>
+  <h3>분류별 집계 (Aggregate · Group By CategoryId)</h3>
+  <table>
+    <tr><th>분류</th><th class="r">상품 수</th><th class="r">합계</th><th class="r">평균 단가</th></tr>
+    ${group.map(g=>`<tr><td><span class="chip">${g.c.Label}</span></td><td class="r">${g.count}</td>
+      <td class="r">${won(g.sum)}</td><td class="r">${won(g.avg)}</td></tr>`).join("")}
+  </table>`;
+}
+function doSearch(){ keyword=document.getElementById("kw").value.trim(); refresh(); render(); }
+
+/* --- 상품 상세 (ProductDetailRole 필요) --- */
+function detailHTML(){
+  const back=`<p><a onclick="go('search')">← 목록으로</a></p>`;
+  if(!CheckProductDetailRole(me())){
+    return back+`<div class="box deny"><b>접근 권한이 없습니다.</b><br><br>
+      ProductDetail 화면은 <code>ProductDetailRole</code> 사용자만 접근할 수 있습니다.<br>
+      현재 사용자: <b>${me().Name}</b> → '권한 관리' 탭에서 권한을 부여하세요.</div>`;
+  }
+  const p=Product.find(x=>x.Id===detailId);
+  return back+`<h1>${p.Name}</h1><div class="desc">ProductDetail · Id=${p.Id}</div>
+    <div class="box"><table>
+      <tr><td style="color:var(--sub)">상품명</td><td>${p.Name}</td></tr>
+      <tr><td style="color:var(--sub)">분류</td><td><span class="chip">${catName(p.CategoryId)}</span></td></tr>
+      <tr><td style="color:var(--sub)">단가</td><td>${won(p.Price)}</td></tr>
+    </table></div>`;
+}
+
+/* --- 권한 관리 (Grant/Revoke ProductDetailRole) --- */
+function roleHTML(){
+  return `<h1>권한 관리</h1>
+  <div class="desc">O11 System User 에 ProductDetailRole 부여 / 회수 (GrantProductDetailRole · RevokeProductDetailRole)</div>
+  <table>
+    <tr><th>User</th><th>ProductDetailRole</th><th class="r">작업</th></tr>
+    ${Users.map((u,i)=>{const has=CheckProductDetailRole(u);return `<tr><td>${u.Name}</td>
+      <td class="${has?"ok":""}" style="${has?"":"color:var(--sub)"}">${has?"보유":"없음"}</td>
+      <td class="r"><button onclick="${has?"Revoke":"Grant"}ProductDetailRole(Users[${i}]);render()">${has?"권한 회수":"권한 부여"}</button></td></tr>`}).join("")}
+  </table>`;
+}
+
+/* init */
+document.getElementById("who").innerHTML=Users.map((u,i)=>`<option value="${i}">${u.Name}</option>`).join("");
+refresh(); render();
+</script>
+</body>
+</html>

@@ -7,16 +7,20 @@
 
 ## 📅 일차별 학습 및 과제 현황
 
-- [Day 1: OutSystems 개요 및 OT](#)
-- [Day 2: Aggregate 필터링 및 변수 바인딩](#-day-2-aggregate-필터링-및-변수-바인딩)
-- [Day 3: Entity 1:1 관계 및 CRUD (상세 화면 / 저장 / 삭제)](#-day-3-entity-11-관계-및-crud-상세-화면--저장--삭제)
-- [Day 4: 대시보드 레이아웃 및 위젯/액션 실습](#-day-4-대시보드-레이아웃-및-위젯액션-실습)
-- [Day 5: 엔터티 관계(1:N, N:1) 및 마스터-디테일 CRUD 종합 실습](#-day-5-엔터티-관계1n-n1-마스터-디테일-crud-종합-실습)
-- [Day 6: Entity 1:1 관계 상세 화면 및 참조 무결성 삭제 제어 실습](#-day-6-entity-1:1-관계-상세-화면-및-참조-무결성-삭제-제어-실습)
-- [Day 7: 장바구니(Cart) 다중 선택, 페이징 및 자바스크립트 연동 실습](#-day-7-장바구니cart-다중-선택-페이징-및-자바스크립트-연동-실습)
-
+- [Day 1: OutSystems 개요 및 OT](#day-1)
+- [Day 2: Aggregate 필터링 및 변수 바인딩](#day-2)
+- [Day 3: Entity 1:1 관계 및 CRUD (상세 화면 / 저장 / 삭제](#day-3)
+- [Day 4: 대시보드 레이아웃 및 위젯/액션 실습](#day-4)
+- [Day 5: 엔터티 관계(1:N, N:1) 및 마스터-디테일 CRUD 종합 실습](#day-5)
+- [Day 6: Entity 1:1 관계 상세 화면 및 참조 무결성 삭제 제어 실습](#day-6)
+- [Day 7: 장바구니(Cart) 다중 선택, 페이징 및 자바스크립트 연동 실습](#day-7)
+- [Day 8: Data Action을 활용한 서버사이드 복합 검색 및 리스트 매핑 실습](#day-8)
+- [Day 9: 매출 대시보드(KPI/별점 블록) 및 직원 관리(서버사이드 정렬/페이징/파일 업로드) 실습](#day-9)
+- [Day 10: Advanced SQL 및 Server Action SQL 쿼리 실습](#day-10)
 
 ---
+
+<div id="day-2"></div>
 
 ## 📌 Day 2: Aggregate 필터링 및 변수 바인딩
 
@@ -59,6 +63,8 @@ Aggregate의 Filter 기능, 변수(Local Variable) 바인딩, 그리고 `Refresh
 
 ---
 
+<div id="day-3"></div>
+
 ## 📌 Day 3: Entity 1:1 관계 및 CRUD (상세 화면 / 저장 / 삭제)
 
 Entity 간의 1:1 관계(Relationship)를 이해하고, Parameter를 활용한 화면 이동 및 데이터의 **C**reate / **R**ead / **U**pdate / **D**elete 액션을 구현했습니다.
@@ -96,6 +102,8 @@ Entity 간의 1:1 관계(Relationship)를 이해하고, Parameter를 활용한 �
 </details>
 
 ---
+
+<div id="day-4"></div>
 
 ## 📌 Day 4: 대시보드 레이아웃 및 위젯/액션 실습
 
@@ -136,6 +144,8 @@ Container를 활용한 화면 레이아웃 구성, 집계 데이터 표현(Count
 </details>
 
 ---
+
+<div id="day-5"></div>
 
 ## 📌 Day 5: 엔터티 관계(1:N, N:1) 및 마스터-디테일 CRUD 종합 실습
 
@@ -187,6 +197,8 @@ Customer(9개 속성), Product, Order 간의 1:N(`Customer` → `Order`) 및 N:1
 
 ---
 
+<div id="day-6"></div>
+
 ## 📌 Day 6: Entity 1:1 관계 상세 화면 및 참조 무결성 삭제 제어 실습
 
 Customer와 CustomerDetail 간의 1:1 관계 모델링을 이해하고, 상세 화면 분기 처리와 연관 엔티티 간 참조 무결성을 고려한 삭제(Delete) 순서 제어 로직을 구현했습니다.
@@ -229,6 +241,8 @@ Customer와 CustomerDetail 간의 1:1 관계 모델링을 이해하고, 상세 �
 </details>
 
 ---
+
+<div id="day-7"></div>
 
 ## 📌 Day 7: 장바구니(Cart) 다중 선택, 페이징 및 자바스크립트 연동 실습
 
@@ -277,6 +291,158 @@ Customer, Product, Cart 엔터티 간의 관계(`Cart` → `Customer` N:1, `Cart
    - `SAVE` 버튼 (`SaveCartOnClick`): `ConfirmDialog("저장하시겠습니까?")` ➔ True 시 `SaveCart(SelectedCustomerId, CartList)` 실행 ➔ 메시지 표시 ➔ `CartList` 비움
    - 우상단 '장바구니 상세' 링크: `CartDetail` 화면 이동 (`CustomerId=SelectedCustomerId` 파라미터 전달)
    - `CartDetail` 화면 구성: `GetCartByCustomer` (Cart + Product Join) Aggregate를 이용해 내역 표시, 각 상품 행 끝 삭제 버튼 ➔ `DeleteCart` 서버 액션 ➔ `Refresh Data(GetCartByCustomer)` 연동
+
+</details>
+
+---
+
+<div id="day-8"></div>
+
+## 📌 Day 8: Data Action을 활용한 서버사이드 복합 검색 및 리스트 매핑 실습
+
+ProductCategory와 Product 엔터티 간 1:N 관계를 설정하고, `On Demand`로 동작하는 Data Action을 활용하여 카테고리 필터와 부분 일치(LIKE) 검색을 조합한 서버사이드 복합 검색 기능을 구현했습니다.
+
+### 🔗 실습 결과 링크
+- **Product Search App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/ProductSearch/" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+  * 카테고리 드롭다운 및 상품명 키워드 조건에 따른 실시간 서버사이드 검색 및 구조체(Structure) 매핑 구현
+
+### 🛠️ 핵심 구현 기능
+- **엔터티 모델링 및 데이터 Bootstrap**
+  - ProductCategory(Id, Label) 및 Product(Id, Name, CategoryId, Price) 엔터티 생성 및 1:N 관계 확인 (`Name`, `CategoryId` 필수 설정)
+  - Excel Bootstrap을 통한 ProductCategory 시드(7건) 및 Product 시드(약 22건) 적재
+- **Data Action 및 On Demand 데이터 페칭**
+  - 화면 진입 시 초기 조회를 방지하기 위해 `Fetch = On Demand`로 설정된 `SearchProducts` Data Action 구현 (Input: `CategoryId`, `SearchName` / Output: `ProductRow` List)
+  - Data Action 내부에서 Product와 ProductCategory를 Join한 Aggregate 실행 (선택적 분류 필터 및 `Index(Product.Name, SearchName) >= 0` 부분 검색 조건 적용)
+  - `For Each` 루프를 활용하여 Join 결과를 `ProductRow` 구조체 리스트로 매핑하여 반환
+- **동적 필터 인터랙션 및 화면 분기**
+  - 분류 Dropdown의 `OnChange` 이벤트와 조회 Button의 `Click` 이벤트를 통해 `Refresh Data(SearchProducts)` 실행 및 즉시 갱신
+  - 초기 진입 시 빈 목록 상태에 대한 안내 문구 표출을 위한 If 분기 처리 구현
+
+<details>
+<summary><b>🔍 Day 8 상세 실습 시나리오 보기 (클릭)</b></summary>
+
+#### 🧩 Mission: Data Action 기반 복합 검색 및 데이터 매핑 구현
+1. **엔터티 및 시드 데이터 준비**:
+   - `ProductCategory`(Id, Label) / `Product`(Id, Name, CategoryId, Price) 엔터티 생성 및 1:N 관계 설정 (`Name`, `CategoryId` 필수)
+   - Excel Bootstrap 활용하여 ProductCategory(7건) 및 Product(약 22건) 시드 데이터 적재
+2. **ProductSearch 화면 및 Local Variables 선언**:
+   - Local Variables: `SelectedCategoryId` (ProductCategory Identifier), `SearchName` (Text)
+   - `GetCategories` Aggregate 생성 (`Fetch = At Start`) 및 상단 상품분류 Dropdown 바인딩 (`Source=GetCategories.List`, 표시=`Label`, 값=`SelectedCategoryId`)
+3. **ProductRow Structure 정의 및 Data Action 생성**:
+   - `ProductRow` Structure 정의 (속성: `ProductName Text`, `CategoryLabel Text`, `Price Currency`)
+   - `SearchProducts` Data Action 생성 (`Fetch = On Demand`, Input: `CategoryId`, `SearchName`, Output: `ProductRow List`)
+   - Data Action 내부 로직:
+     - Product와 ProductCategory를 Join하는 Aggregate (`GetProducts`) 배치 (필터: 분류 선택값 optional 및 `Index(Product.Name, SearchName) >= 0`)
+     - Loop (`For Each`)를 사용하여 Join된 결과를 `ProductRow` 리스트에 매핑하여 반환
+4. **화면 위젯 및 이벤트 연결**:
+   - 결과 Table 배치 (Source=`SearchProducts` 출력 List) 및 컬럼 구성 (상품명, 분류, 단가)
+   - 분류 Dropdown `OnChange` 이벤트 연결 ➔ `Refresh Data(SearchProducts)` (변경 즉시 필터링)
+   - 상품명 Input + 조회 Button 연결 (`SearchOnClick`) ➔ `Refresh Data(SearchProducts)` (부분 LIKE 검색)
+   - **On Demand 동작 확인**: 화면 진입 시 초기 데이터가 없는 빈 목록 상태를 처리하기 위한 If 분기 안내 메시지 구현
+
+</details>
+
+---
+
+<div id="day-9"></div>
+
+## 📌 Day 9: 매출 대시보드(KPI/별점 블록) 및 직원 관리(서버사이드 정렬/페이징/파일 업로드) 실습
+
+상품 매출 데이터 집계 및 **블록(Block) 컴포넌트**를 활용한 별점 상호작용 기능, 그리고 대규모 데이터 처리를 위한 서버사이드 페이징, 동적 정렬, 바이너리 파일 업로드/다운로드를 구현했습니다.
+
+### 🔗 실습 결과 링크
+- **Sales Dashboard App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/SalesDashboardReal/" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+  * 매출 KPI 집계, 상품별 판매 집계 및 커스텀 StarRating 블록을 통한 실시간 별점 평가 기능 구현
+- **Employee Practice App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/EmployeePractice/" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+  * 직원 60여 명 시드 데이터 기반 서버사이드 페이징, 동적 정렬 헤더, 프로필 사진 업로드/다운로드 및 상세 CRUD 구현
+
+### 🛠️ 핵심 구현 기능
+- **매출 대시보드 및 커스텀 별점 블록 (`SalesDashboard`)**
+  - Product, ProductSale 엔터티 1:N 관계 설정 및 Excel Bootstrap을 통한 시드 데이터 적재
+  - `GetSalesKpi` Aggregate를 통한 총 수량·금액 및 평균 금액 집계 및 KPI 카드 3개 구성
+  - `StarRating` UI 블록 생성 (Input: `Rating`, `IsEditable` / Output Event: `OnRate`), 아이콘 위젯 및 조건부 이벤트 바인딩을 통한 인터랙티브 별점 시스템 구축
+- **대규모 직원 데이터 페이징 및 동적 정렬 (`EmployeePractice`)**
+  - 11개 속성을 가진 `Employee` 엔터티 생성 및 약 58~60명 시드 데이터 Excel Bootstrap 적재
+  - `GetEmployeesPaged` 서버 액션을 구현하여 서버사이드 페이징 (`StartIndex`, `MaxRecords`) 및 동적 정렬 (`SortColumn`, `SortAscending`) 처리
+  - OutSystems UI Pagination 패턴 적용 및 헤더 클릭 시 정렬 토글/교체 및 페이지네이션 리셋 로직 구현
+- **프로필 사진 업로드 및 다운로드 제어**
+  - Upload 위젯을 활용하여 프로필 사진의 Binary 데이터와 파일명(`ProfilePhoto`, `PhotoFileName`) 바인딩 및 저장
+  - 사진 유무에 따른 조건부 If 분기를 적용하여 Download 노드를 통한 파일 다운로드(`DownloadPhoto` 액션) 기능 구현
+
+<details>
+<summary><b>🔍 Day 9 상세 실습 시나리오 보기 (클릭)</b></summary>
+
+#### 🧩 Mission 1: 매출 대시보드 및 StarRating 블록 구현 (`SalesDashboardReal`)
+1. **엔터티 모델링 및 시드 데이터 적재**:
+   - `Product` (Id, Name, Category, Rating Integer, 기본 0) / `ProductSale` (수량·금액·판매일) 엔터티 및 1:N 관계 확인/생성
+   - Excel Bootstrap 활용하여 Product + ProductSale 시드 데이터 적재 (`Rating` 초기값 0)
+2. **대시보드 및 KPI 구성**:
+   - `SalesDashboard` 화면 생성 및 상품판매정보 Table 배치 (`GetSales`: ProductSale + Product Join)
+   - `GetSalesKpi` Aggregate 생성 (`Sum(Quantity)`, `Sum(Amount)`, `Average(Amount)`) 및 KPI 카드 3개 구성
+   - `GetSalesByProduct` Aggregate 생성 (Group By Product, Sum·Sum·Average 집계) 및 상품별 집계 Table 배치
+3. **StarRating 블록 및 상호작용 구현**:
+   - `StarRating` 블록 생성: Input Parameter (`Rating Integer`, `IsEditable Boolean`), Output Event (`OnRate(NewRating Integer)`) 정의
+   - 블록 내부: Icon 위젯 5개 배치, 표시 조건=`If(Rating >= n)`, 편집 모드(`IsEditable`)일 때 별 클릭 시 `OnRate(n)` 이벤트 발생
+   - 상품 목록 (`GetProducts`) 배치 및 행 클릭 시 `SelectedProductId` 세팅 (`SelectProduct` 액션 ➔ `GetProductById` 새로고침)
+   - 선택 상품 편집 패널에서 `StarRating` 블록의 `IsEditable = Yes` 설정 및 블록 `OnRate` 이벤트 발생 시 `SaveRating(NewRating)` 액션 실행 (`Product.Rating` 세팅 ➔ `CreateOrUpdateProduct` 덮어쓰기 ➔ 데이터 새로고침)
+
+#### 🧩 Mission 2: 직원 관리, 페이징, 정렬 및 파일 처리 구현 (`EmployeePractice`)
+1. **Employee 엔터티 및 시드 데이터 준비**:
+   - `Employee` 엔터티 (11속성: `EmployeeNo`, `Name`, `Department`, `Position`, `Email`, `Phone`, `HireDate`, `Status`, `ProfilePhoto` Binary Data, `PhotoFileName` 등) 확인 및 생성
+   - Excel Bootstrap을 통해 직원 약 58~60명 시드 데이터 적재 (동적 정렬 및 페이징 테스트용)
+2. **서버사이드 페이징 및 정렬 액션 구현**:
+   - `GetEmployeesPaged` 서버 액션 생성 (Input: `StartIndex`, `MaxRecords`, `SortColumn`, `SortAscending` / Output: `Employees` List, `TotalCount`)
+   - `EmployeeList` 화면 생성 및 Local Variables 선언 (`StartIndex=0`, `PageSize=10`, `SortColumn='Name'`, `SortAscending=True`, `TotalPages` 등)
+   - `LoadEmployees` 스크린 액션 작성 (`GetEmployeesPaged` 호출 ➔ 결과 Assign ➔ `TotalPages = Trunc((TotalCount + PageSize - 1) / PageSize)` 계산), `OnInitialize`에서 최초 호출
+3. **목록 테이블 및 동적 정렬/페이징 UI 연동**:
+   - Table 위젯 배치 (Source = `Employees` Local List) 및 컬럼 구성 (사번, 이름, 부서, 직급, 입사일, 상태)
+   - 헤더 동적 정렬 구현: `SortBy` 스크린 액션 (같은 컬럼 클릭 시 `SortAscending` 토글, 다른 컬럼 클릭 시 `SortColumn` 교체 및 오름차순 적용, `StartIndex=0` 리셋) 및 헤더 정렬 아이콘 표출
+   - OutSystems UI Pagination 패턴 적용 (한 페이지 Max 10건) 및 `PaginationOnNavigate` 액션 연동 (`StartIndex = NewStartIndex` ➔ `LoadEmployees`)
+4. **상세 화면, 파일 업로드 및 다운로드 구현**:
+   - 행 끝 '상세' 버튼 컬럼 추가 ➔ `EmployeeDetail` 화면 이동 (`EmployeeId = 현재 행 Id`)
+   - `EmployeeDetail` 화면 구성: Input Parameter `EmployeeId`, `GetEmployeeById` Aggregate (`Filter Customer.Id = EmployeeId`, `Max Records=1`)
+   - Form 구성 (사번, 이름, 부서, 직급, 이메일, 전화, 입사일, 상태 / 사번·이름 필수값 검증)
+   - 프로필 사진 업로드: Upload 위젯을 `ProfilePhoto`(Binary)와 `PhotoFileName`에 바인딩
+   - 프로필 사진 다운로드: `DownloadPhoto` 스크린 액션(Download 노드 활용) 생성 및 If 분기를 통해 `Employee.ProfilePhoto` 유무에 따른 다운로드 버튼 제어
+   - **Save 액션**: `If Form.Valid` ➔ `CreateOrUpdateEmployee` 서버 액션 실행 ➔ Message 표시 ➔ `EmployeeList`로 이동
+
+</details>
+
+---
+
+<div id="day-10"></div>
+
+## 📌 Day 10: Advanced SQL 및 Server Action SQL 쿼리 실습
+
+OutSystems Server Action 내에 SQL 노드를 활용하여 데이터베이스 직접 조회 쿼리를 작성하고, 집계 함수(`GROUP BY`, `HAVING`, `AVG`, `MAX`)를 이용한 부서별 연봉 통계 및 결과 매핑을 구현했습니다.
+
+### 🔗 실습 결과 링크
+- **Advanced SQL Practice App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/SearchProduct" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+  * 서버사이드 SQL 노드를 통한 부서별 평균 및 최고 연봉 집계 쿼리 실행 및 Table 위젯 시각화 구현
+
+### 🛠️ 핵심 구현 기능
+- **Server Action 내 SQL 노드 활용**
+  - Server Action 내부에 SQL 노드를 추가하여 직접 SQL 쿼리 작성 및 실행 제어
+- **고급 집계 쿼리 작성 (`GROUP BY`, `HAVING`, `AVG`, `MAX`)**
+  - 부서별 그룹화를 수행하고 집계 함수를 적용하여 부서별 평균 연봉(`AVG`)과 최고 연봉(`MAX`) 산출
+  - 필요에 따라 `HAVING` 절을 활용한 조건 필터링 구현
+- **Output Structure 매핑 및 Table 위젯 시각화**
+  - SQL 쿼리 결과를 안전하게 받을 수 있도록 Output Structure를 정의하고 데이터 매핑
+  - 화면에 Table 위젯을 배치하여 집계된 부서별 연봉 통계 결과 출력 및 1-Click Publish 후 데이터 정확성 검증
+
+<details>
+<summary><b>🔍 Day 10 상세 실습 시나리오 보기 (클릭)</b></summary>
+
+#### 🧩 Mission: 부서별 연봉 통계 SQL 쿼리 및 화면 표시 구현
+1. **서버 액션 및 SQL 노드 구성**:
+   - Server Action 생성 및 내부 워크플로우에 SQL 노드 추가
+2. **SQL 쿼리 작성**:
+   - `GROUP BY Department`, `HAVING`, `AVG`, `MAX` 함수를 조합하여 부서별 평균 연봉과 최고 연봉을 계산하는 SQL 문장 작성
+3. **Output Structure 정의 및 매핑**:
+   - 쿼리 결과를 담을 Output Structure를 정의하고 SQL 노드 Output에 연결하여 결과 매핑
+4. **화면 표시 및 검증**:
+   - 화면에 Table 위젯을 배치하고 SQL 실행 결과를 소스로 바인딩하여 부서별 연봉 통계 표시
+   - 1-Click Publish 실행 후 쿼리 결과의 정확성 검증
 
 </details>
 
