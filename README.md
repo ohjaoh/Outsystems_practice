@@ -18,6 +18,7 @@
 - [Day 9: 매출 대시보드(KPI/별점 블록) 및 직원 관리(서버사이드 정렬/페이징/파일 업로드) 실습](#day-9)
 - [Day 10: Advanced SQL 및 Server Action SQL 쿼리 실습](#day-10)
 - [Day 11: 외부 REST API 연동 및 공공데이터(OpenAPI) 활용 실습](#-day-11)
+- [Day 12: AI Mentor 활용 HR 명부 앱 구축 및 ODC 권한/UI 보완 실습](#day-12)
 
 ---
 
@@ -497,4 +498,49 @@ OutSystems Server Action 내에 SQL 노드를 활용하여 데이터베이스 �
 
 ---
 
+<div id="day-12"></div>
+
+## 📌 Day 12: AI Mentor 활용 HR 명부 앱 구축 및 ODC 권한/UI 보완 실습
+
+OutSystems Developer Cloud(ODC) 환경에서 **AI Mentor(App Generation)** 기능을 활용해 사내 HR 담당자를 위한 직원 명부 앱을 생성하고, Mentor가 자동 처리하지 못하는 엔티티/속성 검토, ODC Studio 기반 수동 인터랙션 보완, Role 기반 권한 제어 및 UI 라벨 한글화를 완성했습니다.
+
+### 🔗 실습 결과 링크
+- **Day 12 HR Directory Prompt/Mentor App** 👉 <a href="https://personal-rglsu2lt-dev.outsystems.app/Day012_HRDirectory" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+  * AI Mentor에 요구사항 명세(PDF) 프롬프트를 전달하여 기초 앱 스캐폴딩 및 생성 진행
+- **Day 12 Station Master & HR Management Practice App** 👉 <a href="https://personal-rglsu2lt-dev.outsystems.app/Day12_StationMasterManagement/" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+  * ODC Studio에서 목록 행 클릭 이동, 파일 업로드/다운로드 속성 검증, Manager/Administrator 역활 권한 분기 및 UI 한글화 완성을 적용한 결과 화면
+
+### 🛠️ 핵심 구현 기능
+- **AI Mentor 프롬프트 및 요구사항 검토/수정**
+  - 첨부된 요구사항 명세 PDF 파일 기반으로 AI Mentor 앱 생성 진행
+  - Mentor가 잘못 생성하거나 누락한 불필요한 엔티티/화면 제거 및 `Employee` 단일 엔티티 구조 검증
+  - 프로필 사진 속성이 파일 업로드가 가능한 `Binary Data` 및 파일명(`Text`) 타입으로 올바르게 반영되었는지 검토 및 보완
+- **ODC Role 기반 접근 제어 (Access Control)**
+  - `Manager`(조회 전용) 및 `Administrator`(등록 및 수정 권한) 두 가지 역할(Role) 정의
+  - UI 상의 버튼(등록, 저장, 삭제 등)에 역할별 조건부 노출(`CheckManagerRole`, `CheckAdministratorRole`) 및 액션 단 예외 제어 적용
+- **ODC Studio 수동 보완 및 UI 한글화**
+  - AI Mentor가 미구현한 목록 행 클릭 시 상세 화면 이동 인터랙션, 정렬·페이징 Table 수동 보완
+  - 8개 필드 편집 Form, 프로필 사진 업로드/다운로드 액션 연동 및 저장 기능 구현
+  - 코드 식별자(Identifier/Entity/Action 이름)는 영문을 유지하고, End-User에게 노출되는 화면 라벨 및 메세지를 한글화 처리
+
+<details>
+<summary><b>🔍 Day 12 상세 실습 시나리오 보기 (클릭)</b></summary>
+
+#### 🧩 Mission: AI Mentor 생성 앱 검토, ODC 수동 보완 및 권한/한글화 완성
+1. **AI Mentor 생성 및 항목별 검토**:
+   - 요구사항 명세 PDF를 AI Mentor에 전달하여 앱 생성 요청
+   - 생성 결과에서 단일 `Employee` 엔티티 속성(사번, 이름, 부서, 직급, 이메일, 전화, 입사일, 상태, 프로필사진 Binary, 파일명 Text) 검토 및 불필요 항목 바로잡기
+2. **Role 권한 설정**:
+   - `Manager` 및 `Administrator` Role 정의
+   - 조회 및 편집 화면 내 권한별 위젯 노출/숨김 및 액션 접근 권한 구성
+3. **ODC Studio 수동 기능 보완**:
+   - 직원 목록 화면: 정렬·페이징 테이블 배치 및 각 행 클릭 시 상세 화면으로 이동하는 Link/OnSelect 이벤트 수동 추가
+   - 직원 상세/편집 화면: 8개 필드 Form 구성, Upload 위젯 기반 프로필 사진 업로드 및 Download 노드 연동 다운로드 구현
+4. **화면 라벨 한글화 및 검증**:
+   - 식별자 이름(Entity, Variable, Action 등)은 영문으로 유지하면서 표 Header, Form Label, Button, Message 등의 화면 라벨을 한글로 완전 변경
+   - 1-Click Publish 후 Manager/Administrator 로그인 상태별 권한 동작 및 UI 정상 작동 검증
+
+</details>
+
+---
 > **Note:** 실습 링크는 개인 학습용 OutSystems Personal Environment 환경에서 구동되며, 서버 상태에 따라 접속이 원활하지 않을 수 있습니다.
