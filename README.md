@@ -17,6 +17,7 @@
 - [Day 8: Data Action을 활용한 서버사이드 복합 검색 및 리스트 매핑 실습](#day-8)
 - [Day 9: 매출 대시보드(KPI/별점 블록) 및 직원 관리(서버사이드 정렬/페이징/파일 업로드) 실습](#day-9)
 - [Day 10: Advanced SQL 및 Server Action SQL 쿼리 실습](#day-10)
+- [Day 11: 외부 REST API 연동 및 공공데이터(OpenAPI) 활용 실습](#-day-11)
 
 ---
 
@@ -443,6 +444,54 @@ OutSystems Server Action 내에 SQL 노드를 활용하여 데이터베이스 �
 4. **화면 표시 및 검증**:
    - 화면에 Table 위젯을 배치하고 SQL 실행 결과를 소스로 바인딩하여 부서별 연봉 통계 표시
    - 1-Click Publish 실행 후 쿼리 결과의 정확성 검증
+
+</details>
+
+---
+
+<div id="day-11"></div>
+
+## 📌 Day 11: 외부 REST API 연동 및 공공데이터(OpenAPI) 활용 실습
+
+공공데이터포털 등의 외부 REST API를 OutSystems 환경에 Consume하고, Site Property를 통한 인증키 분리, 응답 JSON 기반 구조체(Structure) 자동 생성, 그리고 서버 액션을 통한 API 호출 및 데이터 시각화를 실습했습니다[cite: 1].
+
+### 🔗 실습 결과 링크
+- **Day 11 공공데이터(특일 정보) 연동 실습 App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/Day011_OpenAPI/" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+  * 특일 정보(getRestDeInfo) API 연동, Site Property 키 관리 및 월별 공휴일 조회 목록 화면 구현[cite: 1]
+- **Day 11 종합지하철정보 API 연동 응용 Practice App** 👉 <a href="https://personal-fdeqhkkx.outsystemscloud.com/Day011_OpenAPI_Practice/" target="_blank" rel="noopener noreferrer">결과 화면 보기</a>  
+  * 외부 OpenAPI 연동 핵심 요지를 응용하여 종합지하철정보 데이터를 자신의 앱에 연동하고 시각화 기능 구현[cite: 1]
+
+### 🛠️ 핵심 구현 기능
+- **외부 REST API 연동 및 Consume 처리**
+  - 공공데이터포털(data.go.kr) 회원가입 및 서비스키(인증키) 발급 후 브라우저 실제 호출 테스트 진행[cite: 1]
+  - OutSystems `Consume REST API`를 활용하여 `GetRestDeInfo`(GET) 추가 및 모듈 의존성 생성[cite: 1]
+- **요청 설정, 응답 Structure 자동 생성 및 Site Property 활용**
+  - Base URL 및 쿼리 파라미터(`solYear`, `solMonth`, `_type=json`, `numOfRows`) 설정 및 샘플 응답 JSON 붙여넣기를 통한 응답 Structure 자동 생성 (`Response > Body > Items > Item`)[cite: 1]
+  - `Site Property`로 `ServiceKey`를 생성하여 요청 파라미터에 바인딩함으로써 보안 및 유지보수성 향상[cite: 1]
+- **서버 액션 및 예외 처리 연동 (`HolidaySearch`)**
+  - `GetHolidays` Server Action 구현: 연도·월 입력 받아 REST 호출 후 Item List 및 성공 여부(`resultCode`) 반환[cite: 1]
+  - `HolidaySearch` 화면 구성: 연도·월 입력(기본 올해/이번달) 및 조회 버튼 연동 (`SearchOnClick` 시 실제 API 호출 및 결과 Assign 후 Table 표시)[cite: 1]
+  - 날짜(`locdate`), 공휴일명(`dateName`), 공휴일 여부 배지(`isHoliday`), 구분(`dateKind`) 매핑 및 빈 결과 If 분기 처리 및 통신 오류/`resultCode <> "00"` 예외 처리 구현[cite: 1]
+
+<details>
+<summary><b>🔍 Day 11 상세 실습 시나리오 보기 (클릭)</b></summary>
+
+#### 🧩 Mission: 외부 OpenAPI 연동 및 공휴일/지하철 정보 조회 구현
+1. **API 활용 신청 및 테스트**:
+   - 공공데이터포털(data.go.kr) '특일 정보(getRestDeInfo)' 활용신청 및 서비스키 발급
+   - 브라우저를 통해 `solYear`, `solMonth`, `_type=json`, `serviceKey` 파라미터로 실제 호출 테스트 수행
+2. **OutSystems REST API Consume 설정**:
+   - OutSystems 서비스튜디오에서 `Consume REST API`로 `GetRestDeInfo`(GET) 추가
+   - Base URL 및 쿼리 파라미터 설정, Site Property로 분리한 `ServiceKey` 바인딩
+   - 샘플 응답 JSON을 붙여넣어 응답 Structure(`Response > Body > Items > Item`) 자동 생성
+3. **Server Action 및 UI 화면 구현**:
+   - `GetHolidays` Server Action 생성 (Year·Month 입력 ➔ REST 호출 ➔ Item List 및 resultCode 반환)
+   - `HolidaySearch` 화면 구성 (연도·월 Input 위젯, 기본값 설정, 조회 Button 연결)
+   - 조회 버튼 클릭 시 (`SearchOnClick`) `GetHolidays` 호출 후 결과 데이터를 Table 위젯에 바인딩
+   - 결과 Table 구성 (날짜 `locdate`, 공휴일명 `dateName`, 공휴일 여부 `isHoliday` 배지, 구분 `dateKind`) 및 데이터가 없을 경우 처리할 If 분기 적용
+4. **예외 처리 및 검증**:
+   - 통신 오류 또는 `resultCode <> "00"` 발생 시 사용자 안내를 위한 예외 처리(Exception Handler) 구성
+   - 1-Click Publish 후 실제 통신을 통해 해당 월 공휴일 및 응용 실습(종합지하철정보 등) 데이터가 정상적으로 표시되는지 검증 완료
 
 </details>
 
